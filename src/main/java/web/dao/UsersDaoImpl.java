@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Component
-public class UsersDAO {
+public class UsersDaoImpl implements UserDao{
     private static int USERS_COUNT;
     private List <User> users;
 

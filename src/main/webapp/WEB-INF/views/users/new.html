@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://thymeleaf.org ">
 <head>
     <meta charset="UTF-8">
     <title>New user</title>
@@ -7,7 +8,7 @@
 <body>
 
 <form th:method="POST" th:action="@{/users}" th:object="${user}">
-    <label for="name" >Enter name:</label>
+    <label for="name">Enter name:</label>
     <input type="text" th:field="*{name}" id="name"/>
     <br/>
     <input type="submit" value="Create"/>
