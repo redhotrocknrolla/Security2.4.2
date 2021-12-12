@@ -3,10 +3,11 @@ package web.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.Service.UserService;
-import web.dao.UsersDaoImpl;
 import web.models.User;
+import javax.validation.Valid;
 
 
 @Controller
@@ -35,8 +36,13 @@ public class UsersController {
     public String newUser(@ModelAttribute("user") User user) {
         return "users/new";
     }
+
     @PostMapping()
-    public String create(@ModelAttribute("user") User user) {
+    public String create(@ModelAttribute("user")@Valid User user,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "users/new";
+        }
         userService.save(user);
         return "redirect:/users";
     }
@@ -45,11 +51,17 @@ public class UsersController {
         model.addAttribute("user", userService.show(id));
         return "users/edit";
     }
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user")User user,@PathVariable("id")int id) {
-        userService.update(id,user);
-        return "redirect:/users";
-    }
+
+@PatchMapping("/{id}")
+public String update(@ModelAttribute("user")@Valid User user, BindingResult bindingResult,
+                     @PathVariable("id") int id) {
+    if (bindingResult.hasErrors())
+        return "users/edit";
+
+    userService.update(id,user);
+    return "redirect:/users";
+}
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id")int id) {
         userService.delete(id);

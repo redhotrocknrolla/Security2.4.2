@@ -1,45 +1,54 @@
 package web.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import web.models.User;
 
-import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 
-@Component
-public class UsersDaoImpl implements UserDao{
-    private static int USERS_COUNT;
-    private List <User> users;
+@Repository
+@ComponentScan("config")
+public class UsersDaoImpl implements UserDao {
 
-    {
-        users = new ArrayList<>();
+    private final EntityManager entityManager;
 
-        users.add(new User(++USERS_COUNT, "Tom"));
-        users.add(new User(++USERS_COUNT, "Bob"));
-        users.add(new User(++USERS_COUNT, "Mike"));
-        users.add(new User(++USERS_COUNT, "Katy"));
+    @Autowired
+    public UsersDaoImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
-
+    @Transactional
     public List<User> index() {
-        return users;
+        return entityManager.createQuery("SELECT user FROM User user", User.class).getResultList();
     }
-
+    @Transactional
     public User show(int id) {
-        return users.stream().filter(user -> user.getId() == id).
-                findAny().orElse(null);
+        return entityManager.find(User.class, id);
     }
 
+    @Transactional
     public void save(User user) {
-        user.setId(++USERS_COUNT);
-        users.add(user);
+        entityManager.persist(user);
+        entityManager.close();
     }
-    public void update(int id,User updateUser) {
-        User userToBeUpdate = show(id);
-        userToBeUpdate.setName(updateUser.getName());
+
+    @Transactional
+    public void update(int id, User updatedUser) {
+        User userToBeUpdated =  entityManager.getReference(User.class,id);
+        userToBeUpdated.setName(updatedUser.getName());
+        userToBeUpdated.setId(updatedUser.getId());
     }
+
+    @Transactional
     public void delete(int id) {
-        users.removeIf(u -> u.getId() == id );
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
+        }
     }
 }
