@@ -1,9 +1,9 @@
-package web.dao;
+package web.repository;
 
 import web.models.User;
 import java.util.List;
 
-public interface UserDao {
+public interface UserRepository {
     List<User> index();
     User show(int id);
     void save(User user);

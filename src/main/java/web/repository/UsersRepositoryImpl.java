@@ -1,8 +1,6 @@
-package web.dao;
+package web.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import web.models.User;
 
@@ -14,12 +12,12 @@ import java.util.List;
 
 @Repository
 @ComponentScan("config")
-public class UsersDaoImpl implements UserDao {
+public class UsersRepositoryImpl implements UserRepository {
 
+    @PersistenceContext
     private final EntityManager entityManager;
 
-    @Autowired
-    public UsersDaoImpl(EntityManager entityManager) {
+    public UsersRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
     @Transactional
@@ -34,7 +32,6 @@ public class UsersDaoImpl implements UserDao {
     @Transactional
     public void save(User user) {
         entityManager.persist(user);
-        entityManager.close();
     }
 
     @Transactional
