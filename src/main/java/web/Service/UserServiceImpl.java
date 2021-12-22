@@ -1,12 +1,16 @@
 package web.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 import web.repository.UserRepository;
 import web.models.User;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
@@ -15,28 +19,32 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+
     @Override
-    public List<User> index() {
-        return userRepository.index();
+    public List<User> getAllUser() {
+        return userRepository.getAllUser();
     }
 
     @Override
-    public User show(int id) {
-        return userRepository.show(id);
+    public User getUserById(long id) {
+        return userRepository.getUserById(id);
     }
 
     @Override
-    public void save(User user) {
-        userRepository.save(user);
+    public void createUser(User user) {
+        userRepository.createUser(user);
+
     }
 
     @Override
-    public void update(int id,User updateUser) {
-        userRepository.update(id,updateUser);
+    public void updateUser(long id, User updatedUser) {
+        userRepository.updateUser(id,updatedUser);
+
     }
 
     @Override
-    public void delete(int id) {
-        userRepository.delete(id);
+    public void deleteUser(long id) {
+        userRepository.deleteUser(id);
+
     }
 }

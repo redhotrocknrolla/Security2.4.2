@@ -1,17 +1,22 @@
 package web.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import web.models.Role;
-import web.models.User;
+
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
+@Transactional
 public class RoleRepositoryImpl implements RoleRepository {
+
+    private final  String defaultRoleName = "ROLE_USER";
+    private final  String adminRoleName = "ROLE_ADMIN";
 
     private EntityManager entityManager;
 
@@ -19,25 +24,46 @@ public class RoleRepositoryImpl implements RoleRepository {
     public RoleRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return entityManager.createQuery("from Role", Role.class).getResultList();
+    }
+
     @Override
     public Role getRoleByName(String name) {
 
-        return entityManager.createQuery("SELECT r FROM Role r WHERE r.name=:name", Role.class)
-                  .setParameter("name", name).getSingleResult();
+        return entityManager.createQuery("SELECT r FROM Role r WHERE r.role = :roleName", Role.class)
+                .setParameter("roleName", name)
+                .setMaxResults(1)
+                .getSingleResult();
     }
 
     @Override
-    public Role getRoleById(Long id) {
-        return entityManager.find(Role.class, id);
+    public HashSet<Role> getSetOfRoles(String[] roleNames) {
+        Set<Role> roleSet = new HashSet<>();
+        for (String role : roleNames) {
+            roleSet.add(getRoleByName(role));
+        }
+        return (HashSet)roleSet ;
+    }
+    @Override
+    public Role getAdminRole() {
+        return getRoleByName(adminRoleName);
     }
 
     @Override
-    public List<Role> allRoles() {
-        return entityManager.createQuery("select r from Role r", Role.class).getResultList();
-    }
+    public void setAdminRoleDefault() {
+        Role adminRole = new Role();
+        adminRole.setRole("ROLE_ADMIN");
+        entityManager.persist(adminRole);
 
+    }
     @Override
-    public Role getDefaultRole() {
-        return getRoleByName("ROLE_USER");
+    public void setUserRoleDefault() {
+        Role userRole = new Role();
+        userRole.setRole("ROLE_USER");
+        entityManager.persist(userRole);
+
     }
 }

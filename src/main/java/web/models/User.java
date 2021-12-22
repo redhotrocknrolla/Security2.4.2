@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,16 +23,28 @@ public class User implements UserDetails {
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     @Column(name = "name")
     private String name;
+
     @Column(name = "password")
     private String password;
-    @Transient
-    private String passwordConfirm;
+
+    @Column(name = "lastName")
+    private String lastName;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role>roles;
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
 
     public User() {
+    }
+
+    public User(Long id, String name, String password, String lastName, Set<Role> roles) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.lastName = lastName;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -50,6 +63,10 @@ public class User implements UserDetails {
         this.name = name;
     }
 
+    public Set<Role> getRoleSet() {
+        return roles;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -62,7 +79,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return getName();
     }
 
     @Override
@@ -89,12 +106,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Set<Role> getRoles() {
@@ -105,3 +122,5 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 }
+
+

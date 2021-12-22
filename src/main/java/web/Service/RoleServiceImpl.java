@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import web.models.Role;
 import web.repository.RoleRepository;
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 
 
 @Service
 @Transactional
 public class RoleServiceImpl implements RoleService {
+
 
     private RoleRepository roleRepository;
 
@@ -20,23 +22,31 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository = roleRepository;
     }
 
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepository.getAllRoles();
+    }
+
     @Override
     public Role getRoleByName(String name) {
         return roleRepository.getRoleByName(name);
     }
 
     @Override
-    public Role getRoleById(Long id) {
-        return roleRepository.getRoleById(id);
+    public HashSet<Role> getSetOfRoles(String[] roleNames) {
+        return roleRepository.getSetOfRoles(roleNames);
     }
 
     @Override
-    public List<Role> allRoles() {
-        return roleRepository.allRoles();
+    public Role getAdminRole() {
+        return roleRepository.getAdminRole();
     }
 
     @Override
-    public Role getDefaultRole() {
-        return roleRepository.getDefaultRole();
+    public void setRolesDefault() {
+
     }
+
+
 }
