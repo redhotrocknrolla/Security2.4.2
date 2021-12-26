@@ -1,6 +1,8 @@
 package web.repository;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import web.models.User;
 
@@ -16,6 +18,7 @@ public class UsersRepositoryImpl implements UserRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
 
     @Override
     public List<User> getAllUser() {
