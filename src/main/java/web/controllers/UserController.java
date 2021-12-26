@@ -1,14 +1,10 @@
 package web.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import web.Service.RoleService;
-import web.Service.UserService;
-import web.models.User;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +13,6 @@ import java.util.List;
 @RequestMapping("/")
 public class UserController {
 
-
-    private final RoleService roleService;
-    private final UserService userService;
-
-    @Autowired
-    public UserController(RoleService roleService, UserService userService) {
-        this.roleService = roleService;
-        this.userService = userService;
-    }
 
     @RequestMapping(value = "hello", method = RequestMethod.GET)
     public String printWelcome(ModelMap model) {
@@ -41,17 +28,6 @@ public class UserController {
     public String loginPage() {
         return "login";
     }
-    @GetMapping("/creatDefaultUsers")
-    public String creatDefaultUsers() {
 
-        roleService.setRolesDefault();
-        User admin = new User();
-        admin.setName("admin");
-        admin.setPassword("admin");
-        admin.getRoleSet().add(roleService.getAdminRole());
-        userService.createUser(admin);
-
-        return "redirect:/admin";
-    }
 
 }

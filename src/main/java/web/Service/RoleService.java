@@ -9,7 +9,6 @@ public interface RoleService {
     List<Role> getAllRoles();
     Role getRoleByName(String name);
     HashSet<Role> getSetOfRoles(String[] roleNames);
-    Role getAdminRole();
-    void setRolesDefault();
+
 
 }

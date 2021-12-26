@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Update user</title>
@@ -7,19 +7,30 @@
 <body>
 
 <form th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
-    <label for="name" >Enter name:</label>
-    <input type="text" th:field="*{name}" id="name"/>
+    <input type="hidden" name="id" th:value="${user.getId()}">
+    <label for="name">
+        <p>NAME</p>
+        <input type="text" th:field="*{name}" id="name">
+    </label>
+    <label for="lastName">
+        <p>LAST NAME</p>
+        <input type="text" th:field="*{lastName}" id="lastName">
+    </label>
     <br/>
-    <label for="lastname">Enter lastname: </label>
-    <input name="lastname" type="text" th:field="*{lastname}" id="lastname"/>
+    <label for="password">
+        <p>PASSWORD</p>
+        <input type="text" th:field="*{password}" id="password">
+    </label>
     <br/>
     <br/>
-    <label for="password">Enter password: </label>
-    <input name="password" type="password" id="password"/>
+    <label for="adminId"><p>Give User admin?</p>
+        <input type="checkbox" id="adminId" name="adminAuth" th:value="Admin">
+    </label>
     <br/>
-    <div th:each="role : ${roles}">
-        <input type="checkbox" name="nameRoles" th:value="${role.role}" th:text="${role.role}" th:checked="${role.role} == USER"/>
-        </div>
+    <div th:each="role : ${t_role}">
+        <input type="checkbox" name="nameRoles" th:value="${role.role}" th:text="${role.role}"
+               th:checked="${role.role} == USER"/>
+    </div>
     <br/>
     <input type="submit" value="Save"/>
     <a th:href="@{/logout}">Exit</a>

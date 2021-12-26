@@ -11,7 +11,5 @@ public interface RoleRepository {
     List <Role> getAllRoles();
     Role getRoleByName(String name);
     HashSet<Role> getSetOfRoles(String[] roleNames);
-    Role getAdminRole();
-    void setAdminRoleDefault();
-    void setUserRoleDefault();
+
 }
