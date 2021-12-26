@@ -1,7 +1,6 @@
 package web.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import web.models.Role;
 import web.repository.RoleRepository;
@@ -38,15 +37,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.getSetOfRoles(roleNames);
     }
 
-    @Override
-    public Role getAdminRole() {
-        return roleRepository.getAdminRole();
-    }
 
-    @Override
-    public void setRolesDefault() {
-
-    }
 
 
 }

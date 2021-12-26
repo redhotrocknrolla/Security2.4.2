@@ -2,6 +2,7 @@ package web.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Transient;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.repository.UserRepository;
 import web.models.User;
@@ -12,6 +13,9 @@ import java.util.List;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    private BCryptPasswordEncoder encoder;
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -32,6 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.createUser(user);
 
     }
